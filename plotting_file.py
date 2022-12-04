@@ -50,7 +50,7 @@ def plot_data_1(global_data, criteria, ax):
     }
     plotting_data = eliminate_columns(global_data, list(estadisticos.difference(plotting_fields)))
 
-    plotting_data = filter_df(global_data, criteria)
+    plotting_data = filter_df(plotting_data, criteria)
     plotting_data = melting(plotting_data, list(plotting_fields),
                             "phase", "mean")
     plotting_data = plotting_data.replace(to_replace="training_mean", value="training")
@@ -70,24 +70,29 @@ def plot_data_1(global_data, criteria, ax):
 
     ax.set_xlabel("epocas")
     ax.set_ylabel(f"Diferencia con la IM real")
+    ax.set_title(f"{muestras} muestras")
     handles, labels = ax.get_legend_handles_labels()
     ax.legend(handles[:2], labels[:2])
 
 
 if __name__ == "__main__":
     global_data = pd.read_csv("global_data.csv")
-    fig, axs = plt.subplots(2, 3, sharey=True, sharex=True)
 
-    rho = 0
-    for ax, muestras in zip(axs.flat, global_data["muestras"].unique()):
-        criteria = {
-            "rho": rho,
-            "muestras": muestras,
-        }
-        plot_data_1(global_data, criteria, ax)
-        ax.set_title(f"Rho = {rho}")
+    for rho in global_data["rho"].unique():
+        fig, axs = plt.subplots(2, 3, sharey=True, sharex=True)
 
+        # rho = 0
+        for ax, muestras in zip(axs.flat, global_data["muestras"].unique()):
+            criteria = {
+                "rho": rho,
+                "muestras": muestras,
+            }
+            plot_data_1(global_data, criteria, ax)
+            ax.grid()
+
+        fig.suptitle(f"Rho = {rho}")
     plt.show()
+
 
 
 
