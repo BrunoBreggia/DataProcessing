@@ -75,35 +75,6 @@ def plot_data_1(global_data, criteria, ax):
     ax.legend(handles[:2], labels[:2])
 
 
-def plot_data_2(global_data, criteria, ax):
-    # a continuacion descomentar lo que se desea graficar
-    plotting_fields = {
-        # "training_mean",
-        "testing_mean",
-        # "training_med", "testing_med",
-        # "training_var", "testing_var",
-        # "training_std", "testing_std",
-        # "training_max", "testing_max",
-        # "training_min", "testing_min",
-    }
-    plotting_data = eliminate_columns(global_data, list(estadisticos.difference(plotting_fields)))
-    plotting_data = filter_df(plotting_data, criteria)
-    plotting_data = melting(plotting_data, list(plotting_fields),
-                            "phase", "mean")
-    plotting_data = plotting_data.replace(to_replace="training_mean", value="training")
-    plotting_data = plotting_data.replace(to_replace="testing_mean", value="testing")
-    plotting_data = filter_df(plotting_data, {"phase": "testing"})
-    plotting_data["mean_difference"] = plotting_data["mean"] - plotting_data["im_verdadera"]
-
-    sns.catplot(
-        data=plotting_data, x="activacion", y="mean_difference", hue="neuronas",
-        ax=ax
-    )
-    ax.set_xlabel("funcion activacion")
-    ax.set_ylabel(f"Diferencia con la IM real")
-    ax.set_title(f"{mine}")
-    handles, labels = ax.get_legend_handles_labels()
-    ax.legend(handles[:2], labels[:2])
 
 
 if __name__ == "__main__":
@@ -124,16 +95,16 @@ if __name__ == "__main__":
         fig.suptitle(f"Rho = {rho}")
 
     # grafico error en función de la funcion de activación
-    fig2, axs2 = plt.subplots(1, 2, sharey=True)
-
-    for ax, mine in zip(axs2.flat, global_data["mine"].unique()):
-        criteria = {
-            "mine": mine,
-        }
-        plot_data_2(global_data, criteria, ax)
-        ax.grid()
-
-    fig2.suptitle(f"Linda grafica")
+    # fig2, axs2 = plt.subplots(1, 2, sharey=True)
+    #
+    # for ax, mine in zip(axs2.flat, global_data["mine"].unique()):
+    #     criteria = {
+    #         "mine": mine,
+    #     }
+    #     plot_data_2(global_data, criteria, ax)
+    #     ax.grid()
+    #
+    # fig2.suptitle(f"Linda grafica")
 
 
 
