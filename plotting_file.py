@@ -55,7 +55,7 @@ def plot_data_1(global_data, criteria, ax):
                             "phase", "mean")
     plotting_data = plotting_data.replace(to_replace="training_mean", value="training")
     plotting_data = plotting_data.replace(to_replace="testing_mean", value="testing")
-    plotting_data["mean_difference"] = plotting_data["mean"] - plotting_data["im_verdadera"]
+    plotting_data["mean_difference"] = plotting_data["im_verdadera"] - plotting_data["mean"]
 
     palette = sns.color_palette("hls", 8)
     parameters_dict = {
@@ -75,38 +75,25 @@ def plot_data_1(global_data, criteria, ax):
     ax.legend(handles[:2], labels[:2])
 
 
-
-
 if __name__ == "__main__":
+
     global_data = pd.read_csv("global_data.csv")
+    for mine in global_data["mine"].unique():
 
-    # grafico error en función de cantidad de épocas
-    for rho in global_data["rho"].unique():
-        fig, axs = plt.subplots(2, 3, sharey=True, sharex=True)
+        # grafico error en función de cantidad de épocas
+        for rho in global_data["rho"].unique():
+            fig, axs = plt.subplots(2, 3, sharey=True, sharex=True)
 
-        for ax, muestras in zip(axs.flat, global_data["muestras"].unique()):
-            criteria = {
-                "rho": rho,
-                "muestras": muestras,
-            }
-            plot_data_1(global_data, criteria, ax)
-            ax.grid()
+            for ax, muestras in zip(axs.flat, global_data["muestras"].unique()):
+                criteria = {
+                    "rho": rho,
+                    "muestras": muestras,
+                    "mine": mine
+                }
+                plot_data_1(global_data, criteria, ax)
+                ax.grid()
 
-        fig.suptitle(f"Rho = {rho}")
-
-    # grafico error en función de la funcion de activación
-    # fig2, axs2 = plt.subplots(1, 2, sharey=True)
-    #
-    # for ax, mine in zip(axs2.flat, global_data["mine"].unique()):
-    #     criteria = {
-    #         "mine": mine,
-    #     }
-    #     plot_data_2(global_data, criteria, ax)
-    #     ax.grid()
-    #
-    # fig2.suptitle(f"Linda grafica")
-
-
+            fig.suptitle(f"Rho = {rho} con {mine}")
 
     plt.show()
 

@@ -9,18 +9,32 @@ def filter_df(data_frame: pd.DataFrame, criteria: dict) -> pd.DataFrame:
     return data_frame
 
 
-global_data = pd.read_csv("global_data.csv")
-global_data["difference"] = global_data["testing_mean"] - global_data["im_verdadera"]
-global_data = filter_df(global_data, {"epoca": 2048, "muestras": 2**14})
+if __name__ == "__main__":
 
-sns.set_theme()
+    global_data = pd.read_csv("global_data.csv")
+    global_data["difference"] = global_data["testing_mean"] - global_data["im_verdadera"]
 
-tags = ["capas", "neuronas", "batch", "mine", "rho"]
+    sns.set_theme()
+    # tags = ["batch"] # ["capas", "neuronas", "batch", "rho"]
+    tags = ["batch", "capas", "epoca"]
 
-for tag in tags:
-    sns.catplot(
-        data=global_data, x="activacion", y="difference", hue=tag,
-    )
+    for mine in global_data["mine"].unique():
+        plotting_data = filter_df(global_data,
+                                  {
+                                      # "epoca": 2048,
+                                      # "muestras": 2 ** 14,
+                                      "mine": mine,
+                                      "activacion": "relu"
+                                  })
+        for tag in tags:
+            sns.catplot(
+                data=plotting_data,
+                x="muestras",
+                y="difference",
+                hue=tag,
+                col="rho",
+                row="neuronas",
+            )
+            plt.suptitle(f"Red {mine}")
 
-
-plt.show()
+    plt.show()
