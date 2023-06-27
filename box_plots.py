@@ -55,5 +55,6 @@ df_est3 = df_est3.melt(id_vars=["last_epoch", "epoca_est"], var_name="estimador"
 
 df_estimations = pd.concat([df_est1, df_est2, df_est3])
 
-sns.boxplot(data=df, x='samples', y='estimador1')
-plt.show()
+# sns.boxplot(data=df_estimations, x='estimador', y='value')
+# sns.boxplot(data=df, x='day', y='tip')
+# plt.show()
