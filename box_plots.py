@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 df = sns.load_dataset('tips')
-print(df.head())
+# print(df.head())
 
 """
 sns.boxplot(x=None, y=None,
@@ -27,34 +27,51 @@ sns.boxplot(x=None, y=None,
 # Read data from sim03 file
 df = pd.read_csv("sim03_data.csv")
 
-# Create dataframe only with simulation parameters
-param_columns = list(df.columns[:-6])
-param_columns.pop(0)  # remove index column
-param_columns.remove("last_epoch")
+df["estimador1"] = df["estimador1"] - df["true_mi"]
+df["estimador2"] = df["estimador2"] - df["true_mi"]
+df["estimador3"] = df["estimador3"] - df["true_mi"]
 
-sim_parameters = df[param_columns].drop_duplicates()  # left with 324 entries
-
-# Create dataframe with simulation results
-result_columns = list(df.keys())
-result_columns.pop(0)  # remove index column
-[result_columns.remove(i) for i in param_columns]
-sim_results = df[result_columns]
+criterio = ["capas", "neuronas", "rho", "samples"]
 
 # Separacion de los datos de cada estimador
-df_est1 = sim_results[["last_epoch", "estimador1", "estimador1_epoca"]]
-df_est2 = sim_results[["last_epoch", "estimador2", "estimador2_epoca"]]
-df_est3 = sim_results[["last_epoch", "estimador3", "estimador3_epoca"]]
+df_est1 = df[["last_epoch", "estimador1", "estimador1_epoca"] + criterio]
+df_est2 = df[["last_epoch", "estimador2", "estimador2_epoca"] + criterio]
+df_est3 = df[["last_epoch", "estimador3", "estimador3_epoca"] + criterio]
 
 df_est1.rename(columns={"estimador1_epoca": "epoca_est"}, inplace=True)
 df_est2.rename(columns={"estimador2_epoca": "epoca_est"}, inplace=True)
 df_est3.rename(columns={"estimador3_epoca": "epoca_est"}, inplace=True)
 
-df_est1 = df_est1.melt(id_vars=["last_epoch", "epoca_est"], var_name="estimador")
-df_est2 = df_est2.melt(id_vars=["last_epoch", "epoca_est"], var_name="estimador")
-df_est3 = df_est3.melt(id_vars=["last_epoch", "epoca_est"], var_name="estimador")
+df_est1 = df_est1.melt(id_vars=["last_epoch", "epoca_est"] + criterio, var_name="estimador", value_name="error")
+df_est2 = df_est2.melt(id_vars=["last_epoch", "epoca_est"] + criterio, var_name="estimador", value_name="error")
+df_est3 = df_est3.melt(id_vars=["last_epoch", "epoca_est"] + criterio, var_name="estimador", value_name="error")
 
 df_estimations = pd.concat([df_est1, df_est2, df_est3])
 
-# sns.boxplot(data=df_estimations, x='estimador', y='value')
+sns.set_style('darkgrid')
+sns.set_palette('Set2')
+
+
+fig, axs = plt.subplots(3, 3, sharey=True, sharex=True)
+
+capas = df_estimations["capas"].unique()
+neuronas = df_estimations["neuronas"].unique()
+rhos = df_estimations["rho"].unique()
+RHO = rhos[2]
+
+
+for i, ax in enumerate(axs.flatten()):
+    CAPAS = capas[i % 3]
+    NEURONAS = neuronas[i // 3]
+    df_aux = df_estimations.loc[df_estimations["rho"] == RHO]
+    df_aux = df_aux.loc[df_aux["capas"] == CAPAS]
+    df_aux = df_aux.loc[df_aux["neuronas"] == NEURONAS]
+    sns.boxplot(data=df_aux, x="samples", y='error',
+                hue="estimador",
+                ax=ax)
+    ax.set_title(f"{CAPAS} capas de {NEURONAS} neuronas")
+fig.suptitle(f"Resultados para Rho {RHO}", fontsize=20)
+plt.show()
+
 # sns.boxplot(data=df, x='day', y='tip')
 # plt.show()
