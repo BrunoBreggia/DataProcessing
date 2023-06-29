@@ -75,3 +75,11 @@ plt.show()
 
 # sns.boxplot(data=df, x='day', y='tip')
 # plt.show()
+
+# Kernel density estimate
+sns.kdeplot(
+    data=df_estimations, x="error", hue="estimador",
+    palette=sns.color_palette("hls", 3)
+)
+plt.title("Desempeño según estimador")
+
