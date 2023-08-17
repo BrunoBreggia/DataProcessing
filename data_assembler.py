@@ -29,8 +29,8 @@ def dataframe_from_directory(dirname: str) -> pd.DataFrame:
 
 
 if __name__ == '__main__':
-    global_data = dataframe_from_directory("ResultadoSimulacion/sim04/")
-    global_data.to_csv("sim04_data.csv")
+    global_data = dataframe_from_directory("ResultadoSimulacion/sim05/")
+    global_data.to_csv("sim05_data.csv")
 
 
 
