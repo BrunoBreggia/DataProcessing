@@ -44,3 +44,24 @@ for suj, comb, cic in product(sujetos, combinaciones, ciclos):
                                        df_temporal["estimacion"].median(),
                                        df_temporal["ciclo"].unique()[0]
                                        ]
+
+fig, axs = plt.subplots(2, 1, sharey=True, sharex=True)
+CICLO = "swing"
+df_datos = df_datos[df_datos["ciclo"] == CICLO]
+
+# colaterales
+sns.boxplot(data=df_datos[(df_datos["lados"] == "R-R") | (df_datos["lados"] == "L-L")],
+            x="angulo", y='mediana',
+            hue="lados",
+            ax=axs[0])
+
+# contralaterales
+sns.boxplot(data=df_datos[(df_datos["lados"] == "R-L") | (df_datos["lados"] == "L-R")],
+            x="angulo", y='mediana',
+            hue="lados",
+            ax=axs[1])
+
+fig.suptitle(f"Resultados para ciclo {CICLO}", fontsize=20)
+axs[0].grid()
+axs[1].grid()
+plt.show()
