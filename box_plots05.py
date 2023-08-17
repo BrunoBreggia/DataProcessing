@@ -79,5 +79,8 @@ sns.boxplot(data=df_aux,
             x="angulo", y='mediana',
             hue="etiqueta",
             ax=axs)
+fig.suptitle(f"Resultados para ciclo {CICLO}", fontsize=20)
 plt.grid()
+plt.show()
+
 
