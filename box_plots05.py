@@ -6,7 +6,7 @@ from itertools import product
 # Read data from sim04 file
 df = pd.read_csv("sim05_data.csv")
 
-# Create one columns with foot-angle side combination
+# Create one column with foot-angle side combination
 df["foot-angle"] = df["foot"] + '-' + df["angle_side"]
 df["combination"] = df["foot"] + "toe" + '-' + df["angle_side"] + df["angle_description"]
 
@@ -48,7 +48,7 @@ df_datos.to_csv("sim05_medianas_realizaciones.csv")
 
 # Graficacion particular
 fig, axs = plt.subplots(2, 1, sharey=True, sharex=True)
-CICLO = "swing"
+CICLO = "nods"
 df_aux = df_datos[df_datos["ciclo"] == CICLO]
 
 # colaterales

@@ -79,8 +79,8 @@ def dataframe_from_directory(dirname:str):
 
 if __name__ == '__main__':
     # data = dataframe_assembly("ResultadoSimulacion/sim01/sim01_C0_T0_R0.json")
-    global_data = dataframe_from_directory("ResultadoSimulacion/sim01/")
-    global_data.to_csv("global_data.csv")
+    global_data = dataframe_from_directory("ResultadoSimulacion/sim05/")
+    global_data.to_csv("sim05_data.csv")
 
 
 
