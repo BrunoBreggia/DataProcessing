@@ -1,6 +1,7 @@
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
+plt.rcParams.update({'font.size': 14})
 
 # Read data from sim04 file
 df = pd.read_csv("sim04_data.csv")
@@ -32,7 +33,7 @@ fig, axs = plt.subplots(1, 1, sharey=True, sharex=True)
 
 capas = df_estimations["capas"].unique()
 neuronas = df_estimations["neuronas"].unique()
-CICLO = "stance"
+CICLO = "full"
 
 # one graph only
 df_aux = df_estimations.loc[df_estimations["ciclo"] == CICLO]
@@ -55,6 +56,7 @@ plt.grid()
 #     ax.grid()
 
 fig.suptitle(f"Resultados para ciclo {CICLO}", fontsize=20)
+plt.subplots_adjust(left=0.15)
 plt.show()
 
 

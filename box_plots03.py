@@ -1,6 +1,8 @@
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
+plt.rcParams.update({'font.size': 14})
+
 
 df = sns.load_dataset('tips')
 # print(df.head())
@@ -57,7 +59,7 @@ fig, axs = plt.subplots(1, 1, sharey=True, sharex=True)
 capas = df_estimations["capas"].unique()
 neuronas = df_estimations["neuronas"].unique()
 rhos = df_estimations["rho"].unique()
-RHO = rhos[1]
+RHO = rhos[0]
 
 # one graph only
 df_aux = df_estimations.loc[df_estimations["rho"] == RHO]
@@ -65,6 +67,11 @@ df_aux = df_aux.loc[df_aux["capas"] == 3]
 df_aux = df_aux.loc[df_aux["neuronas"] == 50]
 sns.boxplot(data=df_aux, x="samples", y='error',
             hue="estimator")
+# plt.legend(loc="upper right", prop={'size': 14})
+# plt.setp(axs.get_xticklabels(), fontsize=14)
+# plt.setp(axs.get_yticklabels(), fontsize=14)
+plt.subplots_adjust(left=0.15)
+
 
 #
 # for i, ax in enumerate(axs.flatten()):
